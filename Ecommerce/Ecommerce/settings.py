@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-3c6mpe*lbk#7c6ac8vw=6snkvb=1@a+iu5=lj56!=1hj#*3_-*
 # DEBUG = True
 DEBUG = False #deployment
 
-ALLOWED_HOSTS = ['ecommerce-sample-demo.herokuapp.com','127.0.0.1']
+ALLOWED_HOSTS = ['sample-ecom-website.herokuapp.com','127.0.0.1']
 
 
 # Application definition
@@ -39,12 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'website'
+    'website.apps.WebsiteConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.security.SecurityMiddleware'
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
+    # 'whitenoise.middleware.security.SecurityMiddleware'
 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -137,3 +139,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/website/images')
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+os.makedirs(STATIC_ROOT, exist_ok=True)
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
