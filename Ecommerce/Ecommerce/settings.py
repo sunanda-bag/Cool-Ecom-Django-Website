@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 
+import django_heroku
+import dj_database_url
+from decouple import config
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,8 +28,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-3c6mpe*lbk#7c6ac8vw=6snkvb=1@a+iu5=lj56!=1hj#*3_-*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = False #deployment
+# DEBUG = True
+DEBUG = False #deployment
 
 ALLOWED_HOSTS = ['sample-ecom-website.herokuapp.com','127.0.0.1']
 
@@ -184,3 +188,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'testerwebsite007@gmail.com'
 EMAIL_HOST_PASSWORD = 'testing321'
 EMAIL_USE_TLS = True
+
+
+django_heroku.settings(locals())
