@@ -24,8 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-3c6mpe*lbk#7c6ac8vw=6snkvb=1@a+iu5=lj56!=1hj#*3_-*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = False #deployment
+DEBUG = True
+# DEBUG = False #deployment
 
 ALLOWED_HOSTS = ['sample-ecom-website.herokuapp.com','127.0.0.1']
 
@@ -39,7 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'website.apps.WebsiteConfig',
+
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'crispy_forms'
 ]
 
 MIDDLEWARE = [
@@ -127,7 +134,9 @@ USE_TZ = True
 # STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'staticfiles'))
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR,'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# STATIC_ROOT = os.path.join(BASE_DIR,'static')
 
 
 
@@ -146,6 +155,32 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/website/images')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-os.makedirs(STATIC_ROOT, exist_ok=True)
+# os.makedirs(STATIC_ROOT, exist_ok=True)
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+# auth
+
+AUTHENTICATION_BACKENDS = [
+
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+
+SITE_ID = 1
+LOGIN_REDIRECT_URL = '/'
+
+# crispy forms 
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+# email 
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'testerwebsite007@gmail.com'
+EMAIL_HOST_PASSWORD = 'testing321'
+EMAIL_USE_TLS = True

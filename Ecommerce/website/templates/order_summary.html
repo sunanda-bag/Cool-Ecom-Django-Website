@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cart_template_tags %}
+
+{% block title %}Checkout Page{% endblock title %}
+{% block short %}Order Summary{% endblock short %}
+
+{% block css %}
+<!--checkout-->
+<link rel="stylesheet" type="text/css" href="{% static 'website/css/checkout.css' %}">
+<style>
+   button.submit.hidden {
+      display: none;
+   }
+</style>
+<!--//checkout-->
+{% endblock css %}
+
+{% block body %}
+<!--Checkout-->
+
+<!-- top Products -->
+<section class="checkout py-lg-4 py-md-3 py-sm-3 py-3">
+   <div class="container py-lg-5 py-md-4 py-sm-4 py-3">
+      <div class="shop_inner_inf">
+         <div class="privacy about">
+
+            <h3><span>Order Summary</span></h3>
+
+            <div class="checkout-right">
+               <h4>Your shopping cart contains: <span>{{request.user|cart_item_count}} Products</span></h4>
+               <table class="timetable_sub">
+                  <thead>
+                     <tr>
+                        <th>S No.</th>
+                        <th>Product Title</th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+
+                        <th>Total Price</th>
+                        <th>Remove</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+
+                     {% for order_item in order.products.all %}
+                     <tr class="rem1">
+
+                        <td class="invert">{{ forloop.counter }}</td>
+
+                        <td class="invert">{{order_item.product.title}}</td>
+
+                        <td class="invert-image"><a href="{{order_item.product.get_absolute_url}}"><img
+                                 src="{{order_item.product.imageURL}}" alt=" " class="img-responsive"></a></td>
+
+                        <td class="invert">${{order_item.product.price}}</td>
+
+                        <td class="invert">
+                           <div class="quantity">
+                              <div class="quantity-select" style="display: inline-flex;">
+                                 <a href="{% url 'website:remove_single_item_from_cart' order_item.product.slug %}"><div class="entry value-minus update-cart">&nbsp;</div></a>
+                                 <div class="entry value"><span>{{order_item.quantity}}</span></div>
+                                 <a href="{% url 'website:add_to_cart' order_item.product.slug %}"><div class="entry value-plus active update-cart">&nbsp;</div></a>
+                              </div>
+                           </div>
+                        </td>
+
+                        <td class="invert">
+                           {% if order_item.product.discount_price %}
+                           ${{order_item.get_total_item_discount_price}}
+                           <span class="badge badge-primary">Saved ${{order_item.get_amount_saved|floatformat:2}}</span>
+                           {% else %}
+                           ${{order_item.get_total_item_price|floatformat:2}}
+                           {% endif %}
+                        </td>
+
+                        <td class="invert">
+                           <div class="rem">
+                              <a href="{% url 'website:remove_from_cart' order_item.product.slug %}"><div class="close1"> </div></a>
+                           </div>
+                        </td>
+
+                     </tr>
+                     {% empty %}
+                     <tr>
+                        <td colspan="7">
+                           Your cart is empty..
+                        </td>
+                        <tr>
+                           <a class="btn btn-primary float-right py-2 mt-4 mx-4" href="/shop">Continue Shopping</a>
+                        </tr>
+                     </tr>
+                     {% endfor %}
+                     {% if order.get_total %}
+                     <tr>
+                        <td colspan="5"><b>Order Total</b> </td>
+                        <td colspan="2"><b>{{ order.get_total|floatformat:2 }}</b></td>
+                     </tr>
+                     
+
+                  
+                  </tbody>
+               </table>
+               <a class="btn btn-warning float-right mt-4" href="/checkout">Proceed To Checkout</a>
+               <a class="btn btn-primary float-right py-2 mt-4 mx-4" href="/shop">Continue Shopping</a>
+               {% endif %}
+            </div>
+            
+
+         </div>
+      </div>
+      <!-- //top products -->
+   </div>
+</section>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+{% endblock body %}
+
+{% block script %}
+<!--js working-->
+<script src="{% static 'website/js/jquery-2.2.3.min.js' %}"></script>
+<!--//js working-->
+
+<!-- cart-js -->
+<script src="{% static 'website/js/minicart.js' %}"></script>
+<script>
+   toys.render();
+
+   toys.cart.on('toys_checkout', function (evt) {
+      var items, len, i;
+
+      if (this.subtotal() > 0) {
+         items = this.items();
+
+         for (i = 0, len = items.length; i < len; i++) { }
+      }
+   });
+</script>
+<!--// cart-js -->
+
+<!--quantity-->
+<script>
+   $('.value-plus').on('click', function () {
+      var divUpd = $(this).parent().find('.value'),
+         newVal = parseInt(divUpd.text(), 10) + 1;
+      divUpd.text(newVal);
+   });
+
+   $('.value-minus').on('click', function () {
+      var divUpd = $(this).parent().find('.value'),
+         newVal = parseInt(divUpd.text(), 10) - 1;
+      if (newVal >= 1) divUpd.text(newVal);
+   });
+</script>
+<!--quantity-->
+
+<!--closed-->
+<script>
+   $(document).ready(function (c) {
+      $('.close1').on('click', function (c) {
+         $('.rem1').fadeOut('slow', function (c) {
+            $('.rem1').remove();
+         });
+      });
+   });
+</script>
+<script>
+   $(document).ready(function (c) {
+      $('.close2').on('click', function (c) {
+         $('.rem2').fadeOut('slow', function (c) {
+            $('.rem2').remove();
+         });
+      });
+   });
+</script>
+<script>
+   $(document).ready(function (c) {
+      $('.close3').on('click', function (c) {
+         $('.rem3').fadeOut('slow', function (c) {
+            $('.rem3').remove();
+         });
+      });
+   });
+</script>
+{% endblock script %}
